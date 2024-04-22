@@ -121,11 +121,7 @@ class OtherInfoWindow : Activity() {
     private fun articleInDB(article: ArticleEntity): String {
         val returnText = "[*]" + article.biography
         val urlString = article.articleUrl
-        findViewById<View>(R.id.openUrlButton1).setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.setData(Uri.parse(urlString))
-            startActivity(intent)
-        }
+        openURL(urlString)
         return returnText
     }
 
