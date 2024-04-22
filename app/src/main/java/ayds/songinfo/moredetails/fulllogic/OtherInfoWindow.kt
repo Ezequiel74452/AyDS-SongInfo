@@ -20,6 +20,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.IOException
 import java.util.Locale
 
+
 class OtherInfoWindow : Activity() {
     private var textPane1: TextView? = null
     private var dataBase: ArticleDatabase? = null
@@ -50,16 +51,14 @@ class OtherInfoWindow : Activity() {
 
     private fun displayArtistInfo(artistName: String?) {
         Log.e(LOG_TAG, "$ARTIST_NAME_EXTRA $artistName")
-
         Thread {
             val article = dataBase!!.ArticleDao().getArticleByArtistName(artistName!!)
             val textBio = if (article == null) {
-                getArticleFromService(artistName)
+                getBioFromService(artistName)
             } else {
-                articleInDB(article)
+                getBioFromDatabase(article)
             }
-
-            loadImage(textBio)
+            showInfo(textBio)
         }.start()
     }
 
@@ -71,27 +70,26 @@ class OtherInfoWindow : Activity() {
         return retrofit.create(LastFMAPI::class.java)
     }
 
-    private fun getArticleFromService(artistName: String): String {
+    private fun getBioFromService(artistName: String): String {
         val callResponse: Response<String>
         var returnText = EMPTY_STR
         val lastFMAPI = getApi()
         try {
             callResponse = lastFMAPI.getArtistInfo(artistName).execute()
-
             Log.e(LOG_TAG, "JSON " + callResponse.body())
-
             val jobj = Gson().fromJson(callResponse.body(), JsonObject::class.java)
-            val artist = jobj[ARTIST].getAsJsonObject()
-            val bioContent = artist[BIO].getAsJsonObject()[CONTENT]
-            val url = artist[URL]
+            val artist = jobj["artist"].getAsJsonObject()
+            val bioContent = artist["bio"].getAsJsonObject()["content"]
+            val url = artist["url"]
+
             if (bioContent == null) {
                 returnText = "No Results"
             } else {
                 returnText = bioContent.asString.replace("\\n", "\n")
                 returnText = textToHtml(returnText, artistName)
-                saveArticleToDB(artistName, returnText, url.asString)
+                saveArticleToDataBase(artistName, returnText, url.asString)
             }
-            openURL(url.asString)
+            updateOpenURLButton(url.asString)
         } catch (e1: IOException) {
             Log.e(LOG_TAG, "Error $e1")
             e1.printStackTrace()
@@ -99,7 +97,7 @@ class OtherInfoWindow : Activity() {
         return  returnText
     }
 
-    private fun saveArticleToDB(artistName: String, bio: String, url: String) {
+    private fun saveArticleToDataBase(artistName: String, bio: String, url: String) {
         Thread {
             dataBase!!.ArticleDao().insertArticle(
                 ArticleEntity(
@@ -110,7 +108,7 @@ class OtherInfoWindow : Activity() {
             .start()
     }
 
-    private fun openURL(url: String) {
+    private fun updateOpenURLButton(url: String) {
         findViewById<View>(R.id.openUrlButton1).setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setData(Uri.parse(url))
@@ -118,14 +116,13 @@ class OtherInfoWindow : Activity() {
         }
     }
 
-    private fun articleInDB(article: ArticleEntity): String {
+    private fun getBioFromDatabase(article: ArticleEntity): String {
         val returnText = "[*]" + article.biography
-        val urlString = article.articleUrl
-        openURL(urlString)
+        updateOpenURLButton(article.articleUrl);
         return returnText
     }
 
-    private fun loadImage(text: String) {
+    private fun showInfo(text: String) {
         runOnUiThread {
             Picasso.get().load(LASTFM_LOGO_URL).into(findViewById<View>(R.id.imageView1) as ImageView)
             textPane1!!.text = Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
@@ -139,10 +136,8 @@ class OtherInfoWindow : Activity() {
         const val LOG_TAG = "TAG"
         const val DATABASE_NAME = "database-name-thename"
         const val EMPTY_STR = ""
-        const val ARTIST = "artist"
-        const val BIO = "bio"
-        const val CONTENT = "content"
-        const val URL = "url"
+        
+        
         fun textToHtml(text: String, term: String?): String {
             val builder = StringBuilder()
             builder.append("<html><div width=400>")
