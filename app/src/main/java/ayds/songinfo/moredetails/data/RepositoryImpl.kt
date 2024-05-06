@@ -6,10 +6,12 @@ import ayds.songinfo.moredetails.domain.Repository
 
 data class ArtistBiography(val artistName: String, val biography: String, val articleUrl: String)
 
+private fun markItAsLocal(article: ArticleEntity) = ArticleEntity(article.artistName,"[**]" + article.biography,article.articleUrl)
+
                                             //???
 class RepositoryImpl: Repository(private val db:ArticleDatabase, private val externalService: LastFMAPI){
     fun getArticle(artistName: String): ArticleEntity{
-        val article = db.ArticleDao().getArticleByArtistName(artistName);
+        val article? = db.ArticleDao().getArticleByArtistName(artistName);
         if(article == null){
             val artistBiography = getArticleFromService(artistName)
             if (artistBiography.biography.isNotEmpty()) {
@@ -18,6 +20,9 @@ class RepositoryImpl: Repository(private val db:ArticleDatabase, private val ext
                 )
                 insertArticle(article);
             }
+        }
+        else{
+            article = markItAsLocal(article);
         }
         return article;
     }
