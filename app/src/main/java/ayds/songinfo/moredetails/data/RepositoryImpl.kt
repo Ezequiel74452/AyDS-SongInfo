@@ -8,8 +8,12 @@ data class ArtistBiography(val artistName: String, val biography: String, val ar
 
 private fun markItAsLocal(article: ArticleEntity) = ArticleEntity(article.artistName,"[**]" + article.biography,article.articleUrl)
 
-                                            //???
-class RepositoryImpl: Repository(private val db:ArticleDatabase, private val externalService: LastFMAPI){
+                                            
+class RepositoryImpl(
+    private val db:ArticleDatabase, 
+    private val externalService: LastFMAPI
+    ): Repository {
+        
     fun getArticle(artistName: String): ArticleEntity{
         val article? = db.ArticleDao().getArticleByArtistName(artistName);
         if(article == null){
