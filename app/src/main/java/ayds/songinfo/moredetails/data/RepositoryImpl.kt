@@ -1,68 +1,32 @@
 package ayds.songinfo.moredetails.data
 
-import ayds.songinfo.moredetails.domain.ArticleEntity
-import ayds.songinfo.moredetails.domain.Repository
+import ayds.songinfo.moredetails.data.external.OtherInfoService
+import ayds.songinfo.moredetails.data.local.OtherInfoLocalStorage
+import ayds.songinfo.moredetails.domain.ArtistBiography
+import ayds.songinfo.moredetails.domain.OtherInfoRepository
 
+internal class OtherInfoRepositoryImpl(
+    private val localStorage: OtherInfoLocalStorage,
+    private val externalService: OtherInfoService,
+) : OtherInfoRepository {
 
-data class ArtistBiography(val artistName: String, val biography: String, val articleUrl: String)
+    override fun getArtistInfo(artistName: String): ArtistBiography {
+        val dbArticle = localStorage.getArticle(artistName)
 
-private fun markItAsLocal(article: ArticleEntity) = ArticleEntity(article.artistName,"[**]" + article.biography,article.articleUrl)
+        val artistBio: ArtistBiography
 
-                                            
-class RepositoryImpl(
-    private val db:ArticleDatabase, 
-    private val externalService: LastFMAPI
-    ): Repository {
-        
-    fun getArticle(artistName: String): ArticleEntity{
-        val article? = db.ArticleDao().getArticleByArtistName(artistName);
-        if(article == null){
-            val artistBiography = getArticleFromService(artistName)
-            if (artistBiography.biography.isNotEmpty()) {
-                article = ArticleEntity(
-                    artistBiography.artistName, artistBiography.biography, artistBiography.articleUrl
-                )
-                insertArticle(article);
+        if (dbArticle != null) {
+            artistBio = dbArticle.apply { markItAsLocal() }
+        } else {
+            artistBio = externalService.getArticle(artistName)
+            if (artistBio.biography.isNotEmpty()) {
+                localStorage.insertArtist( artistBio )
             }
         }
-        else{
-            article = markItAsLocal(article);
-        }
-        return article;
+        return artistBio;
     }
 
-    fun insertArticle(article: ArticleEntity){
-        db.insertArticle(article)
-    }
-
-    private fun getArticleFromService(artistName: String): ArtistBiography {
-        var artistBiography = ArtistBiography(artistName, "", "")
-        try {
-            val callResponse = getSongFromService(artistName)
-            artistBiography = getArtistBioFromExternalData(callResponse.body(), artistName)
-        } catch (e1: IOException) {
-            e1.printStackTrace()
-        }
-
-        return artistBiography
-    }
-
-    private fun getSongFromService(artistName: String) =
-        lastFMAPI.getArtistInfo(artistName).execute()
-
-    private fun getArtistBioFromExternalData(
-        serviceData: String?,
-        artistName: String
-    ): ArtistBiography {
-       val gson = Gson()
-        val jobj = gson.fromJson(serviceData, JsonObject::class.java)
-    
-        val artist = jobj["artist"].getAsJsonObject()
-        val bio = artist["bio"].getAsJsonObject()
-        val extract = bio["content"]
-        val url = artist["url"]
-        val text = extract?.asString ?: "No Results"
-    
-        return ArtistBiography(artistName, text, url.asString)
+    private fun ArtistBiography.markItAsLocal() {
+        isLocallyStored = true
     }
 }
