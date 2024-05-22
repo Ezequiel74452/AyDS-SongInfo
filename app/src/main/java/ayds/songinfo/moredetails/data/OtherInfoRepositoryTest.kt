@@ -10,7 +10,7 @@ import org.junit.Test
 
 class OtherInfoRepositoryTest{
     private val localStorage : OtherInfoLocalStorage = mockk(relaxUnitFun=true)
-    private val externalService : OtherInfoService = mockk(relaxUnitFun=true)
+    private val externalService : OtherInfoService = mockk()
     private val repository : Repository = RepositoryImpl(localStorage,externalService);
 
     //tests:
@@ -20,7 +20,8 @@ class OtherInfoRepositoryTest{
 
     @Test
     fun `given existing song by name should return the song and mark it as local`() {
-        val artistBio : ArtistBiography = mockk()
+        //val artistBio : ArtistBiography = mockk()
+        val artistBio : ArtistBiography = ArtistBiography("name","bio","url",false)
         every { localStorage.getArticle("name") } returns artistBio
 
         val result = repository.getArtistInfo("name")
@@ -30,7 +31,7 @@ class OtherInfoRepositoryTest{
     }
 
     @test
-    fun `given non existing song by name should get it from external service and store it if its biography exists`(){
+    fun `given non existing article by name should get it from external service and store it if its biography exists`(){
         val artistBio : ArtistBiography = ArtistBiography("name","bio","url",false);
         every{ localStorange.getArticle("name")} returns null
         every{ externalService.getArticle("name")} returns artistBio
@@ -38,6 +39,20 @@ class OtherInfoRepositoryTest{
         val result = repository.getArtistInfo("name");
 
         assertEquals(result, artistBio);
+        assertFalse(artistBio.isLocallyStored())
         verify{localStorage.insertArtist(artistBio)}
+    }
+
+    @Test
+    fun ´on empty bio, get artist info from service´(){
+        val artistBio : ArtistBiography = ArtistBiography("name","bio","url",false);
+        every{ localStorange.getArticle("name")} returns null
+        every{ externalService.getArticle("name")} returns artistBio
+
+        val result = repository.getArtistInfo("name");
+
+        assertEquals(result, artistBio);
+        assertFalse(artistBio.isLocallyStored())
+        verify(inverse = true){localStorage.insertArtist(artistBio)}
     }
 }
