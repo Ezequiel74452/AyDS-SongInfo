@@ -3,13 +3,10 @@ package ayds.songinfo.moredetails.data.external
 import ayds.songinfo.moredetails.domain.DomainArticle
 import java.io.IOException
 
-interface OtherInfoService {
-    fun getArticle(artistName: String): DomainArticle
-}
-internal class OtherInfoServiceImpl(
+internal class LastFMServiceImpl(
     private val lastFMAPI: LastFMAPI,
     private val lastFMToArtistBiographyResolver: LastFMToArtistBiographyResolver
-) : OtherInfoService {
+) : LastFMService {
 
     override fun getArticle(artistName: String): DomainArticle {
 
