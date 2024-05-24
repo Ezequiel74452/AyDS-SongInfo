@@ -4,7 +4,7 @@ import ayds.songinfo.moredetails.domain.ArtistBiography
 
 interface OtherInfoLocalStorage {
     fun getArticle(artistName: String): ArtistBiography?
-    fun insertArticle(artistBiography: ArtistBiography)
+    fun insertArtist(artist: ArtistBiography)
 }
 
 internal class OtherInfoLocalStorageImpl(
@@ -18,10 +18,10 @@ internal class OtherInfoLocalStorageImpl(
         }
     }
 
-    override fun insertArtist(artistInfo: ArtistBiography) {
+    override fun insertArtist(artist: ArtistBiography) {
         articleDatabase.ArticleDao().insertArticle(
             ArticleEntity(
-                artistInfo.artistName, artistInfo.biography, artistInfo.articleUrl
+                artist.artistName, artist.biography, artist.articleUrl
             )
         )
     }
