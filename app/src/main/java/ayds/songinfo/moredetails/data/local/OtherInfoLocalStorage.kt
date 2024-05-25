@@ -14,7 +14,7 @@ internal class OtherInfoLocalStorageImpl(
     override fun getArticle(artistName: String): ArtistBiography? {
         val artistEntity = articleDatabase.ArticleDao().getArticleByArtistName(artistName)
         return artistEntity?.let {
-            ArtistBiography(artistName, artistEntity.biography, artistEntity.articleUrl)
+            ArtistBiography(artistName, artistEntity.biography, artistEntity.articleUrl,true);
         }
     }
 

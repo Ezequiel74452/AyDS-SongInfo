@@ -21,13 +21,13 @@ internal class OtherInfoPresenterImpl(
     override fun getArtistInfo(artistName: String) {
         val artistBiography = repository.getArtistInfo(artistName)
 
-        val uiState = artistBiography.toUiState()
+        val uiState = artistBiography.toUiState(artistName)
 
         artistBiographyObservable.notify(uiState)
     }
 
-    private fun ArtistBiography.toUiState() = ArtistBiographyUiState(
-        artistName,
+    private fun ArtistBiography.toUiState(artName: String) = ArtistBiographyUiState(
+        artName,
         artistBiographyDescriptionHelper.getDescription(this),
         articleUrl
     )
