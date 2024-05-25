@@ -1,14 +1,15 @@
 package ayds.songinfo.moredetails.data
 
-//import ayds.songinfo.moredetails.data.external.OtherInfoService
-import
+import ayds.artist.external.lastfm.data.LastFMArticle
+import ayds.artist.external.lastfm.data.LastFMService
 import ayds.songinfo.moredetails.data.local.OtherInfoLocalStorage
 import ayds.songinfo.moredetails.domain.ArtistBiography
 import ayds.songinfo.moredetails.domain.OtherInfoRepository
 
+/*TO DO: Usar broker en vez de clases de LastFM*/
 internal class OtherInfoRepositoryImpl(
     private val localStorage: OtherInfoLocalStorage,
-    private val externalService: OtherInfoService,
+    private val externalService: LastFMService,
 ) : OtherInfoRepository {
 
     override fun getArtistInfo(artistName: String): ArtistBiography {
@@ -19,7 +20,8 @@ internal class OtherInfoRepositoryImpl(
         if (dbArticle != null) {
             artistBio = dbArticle.apply { markItAsLocal() }
         } else {
-            artistBio = externalService.getArticle(artistName)
+            /*TO DO: reemplazar por proxy*/
+            artistBio = mapToArtistBiography(externalService.getArticle(artistName))
             if (artistBio.biography.isNotEmpty()) {
                 localStorage.insertArtist( artistBio )
             }
@@ -27,6 +29,11 @@ internal class OtherInfoRepositoryImpl(
         return artistBio;
     }
 
+    private fun mapToArtistBiography(lfmArticle: LastFMArticle): ArtistBiography{
+        return ArtistBiography(
+            lfmArticle.artistName,lfmArticle.biography,lfmArticle.articleUrl,false
+        );
+    }
     private fun ArtistBiography.markItAsLocal() {
         isLocallyStored = true
     }
