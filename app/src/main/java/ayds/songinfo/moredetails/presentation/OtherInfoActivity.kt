@@ -36,7 +36,7 @@ class OtherInfoActivity : Activity() {
     }
 
     private fun observePresenter() {
-        presenter.artistBiographyObservable.subscribe { artistBiography ->
+        presenter.artistCardObservable.subscribe { artistBiography ->
             updateUi(artistBiography)
         }
     }

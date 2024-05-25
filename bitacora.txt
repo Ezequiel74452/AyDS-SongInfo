@@ -1,0 +1,21 @@
+BITACORA ETAPA 6 | 25-05, 19:20
+
+* Dentro del nuevo paquete external la clase ArtistBiography se cambio a 
+LastFMArticle (cumplen el mismo rol) y se modificaron los atributos.
+
+* ¿OtherInfoLocalStorage debe retornar Cards? Se momento asumo que si.
+	Card no posee prop artistName, pero en la mayoria de los casos
+	ya se dispone del nombre, donde no, se pasa por parametro(OtherInfoPresenter,
+	DescriptionHelper,LocalStorageImpl) como "artName" (para
+	identificarlo si hay que cambiar). El nombre pasado por parametro es el 
+	que se obtiene desde OtherInfoActivity, no el que se recupera de la BD, 
+	no se si sera reelevante.
+	
+* la imagen de lastFm ahora es manejada por el "Resolver" en el paquete external
+
+* la clase ArtistBiography ahora es Card, pero se mantiene ArtistBiographyUiState 
+  para actualizar la UI, pendiente revisar si solo hay que cambiar nombres o 
+  es necesario algo más.
+
+* la prop isLocalStorage pasa a ser obsoleta al tener la prop source, el string que
+  indica que el source es local se encuentra en el inyector (se inyecta a LocalStorageImpl y DescriptionHelper)

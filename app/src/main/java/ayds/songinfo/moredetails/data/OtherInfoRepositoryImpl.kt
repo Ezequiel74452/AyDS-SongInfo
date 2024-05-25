@@ -3,38 +3,38 @@ package ayds.songinfo.moredetails.data
 import ayds.artist.external.lastfm.data.LastFMArticle
 import ayds.artist.external.lastfm.data.LastFMService
 import ayds.songinfo.moredetails.data.local.OtherInfoLocalStorage
-import ayds.songinfo.moredetails.domain.ArtistBiography
+import ayds.songinfo.moredetails.domain.ArtistCard
 import ayds.songinfo.moredetails.domain.OtherInfoRepository
 
 /*TO DO: Usar broker en vez de clases de LastFM*/
 internal class OtherInfoRepositoryImpl(
     private val localStorage: OtherInfoLocalStorage,
-    private val externalService: LastFMService,
+    private val externalService: LastFMService,// CAMBIAR CON BROKER?
 ) : OtherInfoRepository {
 
-    override fun getArtistInfo(artistName: String): ArtistBiography {
-        val dbArticle = localStorage.getArticle(artistName)
+    override fun getArtistInfo(artistName: String): ArtistCard {
+        val dbCard = localStorage.getArticle(artistName)
+        val artistCard: ArtistCard
 
-        val artistBio: ArtistBiography
-
-        if (dbArticle != null) {
-            artistBio = dbArticle.apply { markItAsLocal() }
+        if (dbCard != null) {
+            //Obsoleto, Card tiene prop source
+            //artistBio = dbArticle.apply { markItAsLocal() }
+            artistCard = dbCard;
         } else {
             /*TO DO: reemplazar por proxy*/
-            artistBio = mapToArtistBiography(externalService.getArticle(artistName))
-            if (artistBio.biography.isNotEmpty()) {
-                localStorage.insertArtist( artistBio )
+                val lastFmArticle = externalService.getArticle(artistName)
+                artistCard = mapToArtistCard(lastFmArticle)
+            /**/
+            if (artistCard.description.isNotEmpty()) {
+                localStorage.insertArtist(artistCard, artistName)
             }
         }
-        return artistBio;
+        return artistCard;
     }
 
-    private fun mapToArtistBiography(lfmArticle: LastFMArticle): ArtistBiography{
-        return ArtistBiography(
-            lfmArticle.artistName,lfmArticle.biography,lfmArticle.articleUrl,false
+    private fun mapToArtistCard(lfmArticle: LastFMArticle): ArtistCard{
+        return ArtistCard(
+            lfmArticle.biography,lfmArticle.articleUrl,"LastFM",lfmArticle.lastFMLogoUrl
         );
-    }
-    private fun ArtistBiography.markItAsLocal() {
-        isLocallyStored = true
     }
 }
