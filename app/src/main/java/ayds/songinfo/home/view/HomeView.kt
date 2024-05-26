@@ -50,7 +50,7 @@ class HomeViewActivity : Activity(), HomeView {
 
     override fun navigateToOtherDetails(artistName: String) {
         val intent = Intent(this, ayds.songinfo.moredetails.presentation.OtherInfoActivity::class.java)
-        intent.putExtra("artistName", artistName)
+        intent.putExtra(ayds.songinfo.moredetails.presentation.OtherInfoActivity.ARTIST_NAME_EXTRA, artistName)
         startActivity(intent)
     }
 
