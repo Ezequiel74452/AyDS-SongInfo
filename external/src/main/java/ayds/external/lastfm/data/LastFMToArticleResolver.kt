@@ -1,25 +1,24 @@
-package ayds.songinfo.moredetails.data.external
+package ayds.external.lastfm.data
 
-import ayds.songinfo.moredetails.domain.ArtistBiography
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 
-interface LastFMToArtistBiographyResolver {
-    fun map(serviceData: String?, artistName: String): ArtistBiography
+interface LastFMToArticleResolver {
+    fun map(serviceData: String?, artistName: String): LastFMArticle
 }
 
 private const val ARTIST = "artist"
 private const val BIO = "bio"
 private const val CONTENT = "content"
 private const val URL = "url"
-
 private const val NO_RESULTS = "No Results"
+private const val LOGO_URL= "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Lastfm_logo.svg/320px-Lastfm_logo.svg.png"
 
-internal class LastFMToArtistBiographyResolverImpl : LastFMToArtistBiographyResolver {
+internal class LastFMToArticleResolverImpl : LastFMToArticleResolver {
     override fun map(
         serviceData: String?,
         artistName: String
-    ): ArtistBiography {
+    ): LastFMArticle {
         val gson = Gson()
 
         val jasonObject = gson.fromJson(serviceData, JsonObject::class.java)
@@ -30,6 +29,6 @@ internal class LastFMToArtistBiographyResolverImpl : LastFMToArtistBiographyReso
         val url = artist[URL]
         val text = extract?.asString ?: NO_RESULTS
 
-        return ArtistBiography(artistName, text, url.asString)
+        return LastFMArticle(artistName, text, url.asString, LOGO_URL)
     }
 }

@@ -1,4 +1,4 @@
-package ayds.artist.external.wikipedia.data
+package ayds.external.wikipedia.data
 
 data class WikipediaArticle(
     var description: String,

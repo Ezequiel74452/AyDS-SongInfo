@@ -1,4 +1,4 @@
-package ayds.artist.external.wikipedia.data
+package ayds.external.wikipedia.data
 
 import retrofit2.Call
 import retrofit2.http.GET

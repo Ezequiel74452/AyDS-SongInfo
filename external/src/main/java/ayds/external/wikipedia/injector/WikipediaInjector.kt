@@ -1,11 +1,11 @@
-package ayds.artist.external.wikipedia.injector
+package ayds.external.wikipedia.injector
 
 
-import ayds.artist.external.wikipedia.data.WikipediaTrackService
-import ayds.artist.external.wikipedia.data.JsonToInfoResolver
-import ayds.artist.external.wikipedia.data.WikipediaToInfoResolver
-import ayds.artist.external.wikipedia.data.WikipediaTrackAPI
-import ayds.artist.external.wikipedia.data.WikipediaTrackServiceImpl
+import ayds.external.wikipedia.data.WikipediaTrackService
+import ayds.external.wikipedia.data.JsonToInfoResolver
+import ayds.external.wikipedia.data.WikipediaToInfoResolver
+import ayds.external.wikipedia.data.WikipediaTrackAPI
+import ayds.external.wikipedia.data.WikipediaTrackServiceImpl
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 

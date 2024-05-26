@@ -1,7 +1,7 @@
-package ayds.artist.external.newyorktimes.data
+package ayds.external.newyorktimes.data
 
-import ayds.artist.external.newyorktimes.data.NYTimesArticle.EmptyArtistDataExternal
-import ayds.artist.external.newyorktimes.data.NYTimesArticle.NYTimesArticleWithData
+import ayds.external.newyorktimes.data.NYTimesArticle.EmptyArtistDataExternal
+import ayds.external.newyorktimes.data.NYTimesArticle.NYTimesArticleWithData
 import java.io.IOException
 
 internal class NYTimesServiceImpl(

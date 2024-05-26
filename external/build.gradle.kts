@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "ayds.artist.external"
+    namespace = "ayds.external"
     compileSdk = 34
 
     defaultConfig {
@@ -30,7 +30,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter)

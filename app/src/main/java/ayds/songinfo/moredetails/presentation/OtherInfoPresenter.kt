@@ -2,33 +2,33 @@ package ayds.songinfo.moredetails.presentation
 
 import ayds.observer.Observable
 import ayds.observer.Subject
-import ayds.songinfo.moredetails.domain.ArtistBiography
+import ayds.songinfo.moredetails.domain.ArtistCard
 import ayds.songinfo.moredetails.domain.OtherInfoRepository
 
 interface OtherInfoPresenter {
-    val artistBiographyObservable: Observable<ArtistBiographyUiState>
+    val artistCardObservable: Observable<ArtistBiographyUiState>
     fun getArtistInfo(artistName: String)
 
 }
 
 internal class OtherInfoPresenterImpl(
     private val repository: OtherInfoRepository,
-    private val artistBiographyDescriptionHelper: ArtistBiographyDescriptionHelper
+    private val artistCardDescriptionHelper: ArtistCardDescriptionHelper
 ) : OtherInfoPresenter {
 
-    override val artistBiographyObservable = Subject<ArtistBiographyUiState>()
+    override val artistCardObservable = Subject<ArtistBiographyUiState>()
 
     override fun getArtistInfo(artistName: String) {
-        val artistBiography = repository.getArtistInfo(artistName)
+        val artistCard = repository.getArtistInfo(artistName)
 
-        val uiState = artistBiography.toUiState()
+        val uiState = artistCard.toUiState(artistName)
 
-        artistBiographyObservable.notify(uiState)
+        artistCardObservable.notify(uiState)
     }
 
-    private fun ArtistBiography.toUiState() = ArtistBiographyUiState(
-        artistName,
-        artistBiographyDescriptionHelper.getDescription(this),
-        articleUrl
+    private fun ArtistCard.toUiState(artName: String) = ArtistBiographyUiState(
+        artName,
+        artistCardDescriptionHelper.getDescription(this,artName),
+        infoUrl
     )
 }

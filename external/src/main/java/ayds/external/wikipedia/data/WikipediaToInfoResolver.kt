@@ -1,4 +1,4 @@
-package ayds.artist.external.wikipedia.data
+package ayds.external.wikipedia.data
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject

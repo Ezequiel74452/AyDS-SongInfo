@@ -36,15 +36,15 @@ class OtherInfoActivity : Activity() {
     }
 
     private fun observePresenter() {
-        presenter.artistBiographyObservable.subscribe { artistBiography ->
+        presenter.artistCardObservable.subscribe { artistBiography ->
             updateUi(artistBiography)
         }
     }
 
     private fun initViewProperties() {
         articleTextView = findViewById(R.id.textPane1)
-        openUrlButton = findViewById(R.id.openUrlButton)
-        lastFMImageView = findViewById(R.id.lastFMImageView)
+        openUrlButton = findViewById(R.id.openUrlButton1)
+        lastFMImageView = findViewById(R.id.imageView2)
     }
 
     private fun getArtistInfoAsync() {
@@ -86,11 +86,10 @@ class OtherInfoActivity : Activity() {
         intent.getStringExtra(ARTIST_NAME_EXTRA) ?: throw Exception("Missing artist name")
 
     private fun updateArticleText(infoHtml: String) {
-        articleTextView.text = Html.fromHtml(infoHtml)
+        articleTextView.text = Html.fromHtml(infoHtml, Html.FROM_HTML_MODE_LEGACY)
     }
 
     companion object {
         const val ARTIST_NAME_EXTRA = "artistName"
     }
 }
-

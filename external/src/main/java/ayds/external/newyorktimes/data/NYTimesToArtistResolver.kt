@@ -1,4 +1,4 @@
-package ayds.artist.external.newyorktimes.data
+package ayds.external.newyorktimes.data
 
 import com.google.gson.Gson
 import com.google.gson.JsonElement

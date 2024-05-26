@@ -1,4 +1,4 @@
-package ayds.artist.external.newyorktimes.data
+package ayds.external.newyorktimes.data
 
 import retrofit2.Call
 import retrofit2.http.GET
