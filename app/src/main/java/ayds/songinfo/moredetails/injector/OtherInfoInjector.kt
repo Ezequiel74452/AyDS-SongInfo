@@ -11,20 +11,21 @@ import ayds.songinfo.moredetails.presentation.OtherInfoPresenter
 import ayds.songinfo.moredetails.presentation.OtherInfoPresenterImpl
 
 private const val ARTICLE_BD_NAME = "database-article"
-private const val LOCAL_SOURCE = "localStorage"
 object OtherInfoInjector {
 
     lateinit var presenter: OtherInfoPresenter
     fun initGraph(context: Context) {
-        val otherInfoService = LastFMInjector.lastFMService;//Broker?
-        val articleDatabase =
-            Room.databaseBuilder(context, ArticleDatabase::class.java, ARTICLE_BD_NAME).build()
+        LastFMInjector.init();
 
-        val articleLocalStorage = OtherInfoLocalStorageImpl(articleDatabase,LOCAL_SOURCE)
+        val otherInfoService = LastFMInjector.lastFMService;//Broker?
+        val cardDatabase =
+            Room.databaseBuilder(context, CardDatabase::class.java, ARTICLE_BD_NAME).build()
+
+        val articleLocalStorage = OtherInfoLocalStorageImpl(cardDatabase)
 
         val repository = OtherInfoRepositoryImpl(articleLocalStorage, otherInfoService)
 
-        val artistCardDescriptionHelper = ArtistCardDescriptionHelperImpl(LOCAL_SOURCE)
+        val artistCardDescriptionHelper = ArtistCardDescriptionHelperImpl()
 
         presenter = OtherInfoPresenterImpl(repository, artistCardDescriptionHelper)
     }

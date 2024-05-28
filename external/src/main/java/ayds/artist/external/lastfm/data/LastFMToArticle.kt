@@ -29,6 +29,6 @@ internal class LastFMToArticleResolverImpl : LastFMToArticleResolver {
         val url = artist[URL]
         val text = extract?.asString ?: NO_RESULTS
 
-        return LastFMArticle(artistName, text, url.asString, LOGO_URL)
+        return LastFMArticle(artistName, text, url.asString)
     }
 }

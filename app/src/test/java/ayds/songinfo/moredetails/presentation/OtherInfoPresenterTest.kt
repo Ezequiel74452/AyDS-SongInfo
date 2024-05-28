@@ -19,12 +19,12 @@ class OtherInfoPresenterTest {
         val artistBiography = ArtistBiography("artistName", "biography", "articleUrl")
         every { otherInfoRepository.getArtistInfo("artistName") } returns artistBiography
         every { artistBiographyDescriptionHelper.getDescription(artistBiography) } returns "description"
-        val artistBiographyTester: (ArtistBiographyUiState) -> Unit = mockk(relaxed = true)
+        val artistBiographyTester: (ArtistCardUiState) -> Unit = mockk(relaxed = true)
 
         otherInfoPresenter.artistBiographyObservable.subscribe(artistBiographyTester)
         otherInfoPresenter.getArtistInfo("artistName")
 
-        val result = ArtistBiographyUiState("artistName", "description", "articleUrl")
+        val result = ArtistCardUiState("artistName", "description", "articleUrl")
         verify { artistBiographyTester(result) }
     }
 }

@@ -20,7 +20,7 @@ class OtherInfoRepositoryTest {
     @Test
     fun `on getArtistInfo call getArticle from local storage`() {
         val artistBiography = ArtistBiography("artist", "biography", "url", false)
-        every { otherInfoLocalStorage.getArticle("artist") } returns artistBiography
+        every { otherInfoLocalStorage.getCard("artist") } returns artistBiography
 
         val result = otherInfoRepository.getArtistInfo("artist")
 
@@ -31,7 +31,7 @@ class OtherInfoRepositoryTest {
     @Test
     fun `on getArtistInfo call getArticle from service`() {
         val artistBiography = ArtistBiography("artist", "biography", "url", false)
-        every { otherInfoLocalStorage.getArticle("artist") } returns null
+        every { otherInfoLocalStorage.getCard("artist") } returns null
         every { otherInfoService.getArticle("artist") } returns artistBiography
         every { otherInfoLocalStorage.insertArtist(artistBiography) } returns Unit
 
@@ -45,7 +45,7 @@ class OtherInfoRepositoryTest {
     @Test
     fun `on empty bio, getArtistInfo call getArticle from service`() {
         val artistBiography = ArtistBiography("artist", "", "url", false)
-        every { otherInfoLocalStorage.getArticle("artist") } returns null
+        every { otherInfoLocalStorage.getCard("artist") } returns null
         every { otherInfoService.getArticle("artist") } returns artistBiography
 
         val result = otherInfoRepository.getArtistInfo("artist")

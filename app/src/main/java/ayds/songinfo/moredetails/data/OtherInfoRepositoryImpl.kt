@@ -4,6 +4,7 @@ import ayds.artist.external.lastfm.data.LastFMArticle
 import ayds.artist.external.lastfm.data.LastFMService
 import ayds.songinfo.moredetails.data.local.OtherInfoLocalStorage
 import ayds.songinfo.moredetails.domain.ArtistCard
+import ayds.songinfo.moredetails.domain.ArtistCard.CardSrc
 import ayds.songinfo.moredetails.domain.OtherInfoRepository
 
 /*TO DO: Usar broker en vez de clases de LastFM*/
@@ -12,29 +13,27 @@ internal class OtherInfoRepositoryImpl(
     private val externalService: LastFMService,// CAMBIAR CON BROKER?
 ) : OtherInfoRepository {
 
-    override fun getArtistInfo(artistName: String): ArtistCard {
-        val dbCard = localStorage.getArticle(artistName)
+    override fun getArtistCard(artistName: String): ArtistCard {
+        val dbCard = localStorage.getCard(artistName)
         val artistCard: ArtistCard
 
         if (dbCard != null) {
-            //Obsoleto, Card tiene prop source
-            //artistBio = dbArticle.apply { markItAsLocal() }
-            artistCard = dbCard;
+            artistCard = dbCard.apply{markItAsLocal()}
         } else {
             /*TO DO: reemplazar por proxy*/
                 val lastFmArticle = externalService.getArticle(artistName)
-                artistCard = mapToArtistCard(lastFmArticle)
+                artistCard = lastFmArticle.toCard()
             /**/
             if (artistCard.description.isNotEmpty()) {
-                localStorage.insertArtist(artistCard, artistName)
+                localStorage.insertCard(artistCard)
             }
         }
         return artistCard;
     }
 
-    private fun mapToArtistCard(lfmArticle: LastFMArticle): ArtistCard{
-        return ArtistCard(
-            lfmArticle.biography,lfmArticle.articleUrl,"LastFM",lfmArticle.lastFMLogoUrl
-        );
+    private fun ArtistCard.markItAsLocal() {
+        isLocallyStored = true
     }
+    private fun LastFMArticle.toCard() =
+        ArtistCard(artistName, biography, articleUrl, CardSrc.LASTFM)
 }
