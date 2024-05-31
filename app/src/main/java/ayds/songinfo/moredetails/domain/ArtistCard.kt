@@ -6,3 +6,8 @@ data class ArtistCard(
     val source: String,
     val sourceLogoUrl: String
 )
+
+enum class CardSrc{
+    LASTFM
+    WIKIPEDIA
+}

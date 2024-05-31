@@ -9,7 +9,8 @@ import ayds.songinfo.moredetails.domain.OtherInfoRepository
 /*TO DO: Usar broker en vez de clases de LastFM*/
 internal class OtherInfoRepositoryImpl(
     private val localStorage: OtherInfoLocalStorage,
-    private val externalService: LastFMService,// CAMBIAR CON BROKER?
+    //private val externalService: LastFMService,
+    private val broker: OtherInfoBroker
 ) : OtherInfoRepository {
 
     override fun getArtistInfo(artistName: String): ArtistCard {
