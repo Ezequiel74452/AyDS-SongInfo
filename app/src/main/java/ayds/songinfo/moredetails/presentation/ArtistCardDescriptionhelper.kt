@@ -4,23 +4,21 @@ import ayds.songinfo.moredetails.domain.ArtistCard
 import java.util.Locale
 
 interface ArtistCardDescriptionHelper {
-    fun getDescription(artistCard: ArtistCard,artName :String): String
+    fun getDescription(artistCard: ArtistCard): String
 }
 
 private const val HEADER = "<html><div width=400><font face=\"arial\">"
 private const val FOOTER = "</font></div></html>"
 private const val LOCAL_MARKER = "[*]"
 
-internal class ArtistCardDescriptionHelperImpl(private val localSource:String)
-    : ArtistCardDescriptionHelper {
-    override fun getDescription(artistCard: ArtistCard,artName: String): String {
+internal class ArtistCardDescriptionHelperImpl : ArtistCardDescriptionHelper {
+    override fun getDescription(artistCard: ArtistCard): String {
         val text = getTextDescription(artistCard)
-        return textToHtml(text, artName)
+        return textToHtml(text, artistCard.artistName)
     }
 
     private fun getTextDescription(artistCard: ArtistCard): String {
-        //INYECTA DEP:
-        val prefix = if (artistCard.source == localSource) LOCAL_MARKER else ""
+        val prefix = if (artistCard.isLocallyStored) LOCAL_MARKER else ""
         val text = artistCard.description
         return "$prefix$text"
     }

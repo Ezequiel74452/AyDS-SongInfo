@@ -7,9 +7,9 @@ internal class LastFMServiceImpl(
     private val lastFMToArticleResolver: LastFMToArticleResolver
 ) : LastFMService {
 
-    override fun getArticle(artistName: String): LastFMArticle {
+    override fun getArticle(artistName: String): LastFMArticle? {
 
-        var lastfmArticle = LastFMArticle(artistName, "", "", "")
+        var lastfmArticle : LastFMArticle? = LastFMArticle(artistName, "", "")
         try {
             val callResponse = getSongFromService(artistName)
             lastfmArticle= lastFMToArticleResolver.map(callResponse.body(), artistName)

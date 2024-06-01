@@ -34,9 +34,10 @@ android {
 }
 
 dependencies {
-
+//
     implementation(project(":observer"))
     implementation(project(":external"))
+    implementation(project(":external.lastfm.data"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

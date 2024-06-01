@@ -1,41 +1,38 @@
 package ayds.songinfo.moredetails.data
 
-import ayds.external.lastfm.data.LastFMArticle
-import ayds.external.lastfm.data.LastFMService
 import ayds.songinfo.moredetails.data.local.OtherInfoLocalStorage
-import ayds.songinfo.moredetails.domain.ArtistCard
 import ayds.songinfo.moredetails.domain.OtherInfoRepository
+import ayds.songinfo.moredetails.broker.Broker
+import ayds.songinfo.moredetails.domain.ArtistCard
+import ayds.songinfo.moredetails.domain.EmptyCard
 
 /*TO DO: Usar broker en vez de clases de LastFM*/
 internal class OtherInfoRepositoryImpl(
     private val localStorage: OtherInfoLocalStorage,
-    //private val externalService: LastFMService,
-    private val broker: OtherInfoBroker
+    private val broker: Broker,
 ) : OtherInfoRepository {
 
-    override fun getArtistInfo(artistName: String): ArtistCard {
-        val dbCard = localStorage.getArticle(artistName)
-        val artistCard: ArtistCard
+    override fun getArtistCard(artistName: String): List<ArtistCard>{
+        val dbCards = localStorage.getCards(artistName)
+        var cards: MutableList<ArtistCard> = mutableListOf()
 
-        if (dbCard != null) {
-            //Obsoleto, Card tiene prop source
-            //artistBio = dbArticle.apply { markItAsLocal() }
-            artistCard = dbCard
+        //Si falta alguna tarjeta recupera todas
+        if (dbCards.size == 3) {
+            dbCards.forEach{
+                cards.add(it.apply{markItAsLocal()})
+            }
         } else {
-            /*TO DO: reemplazar por proxy*/
-            val lastFmArticle = externalService.getArticle(artistName)
-            artistCard = mapToArtistCard(lastFmArticle)
-            /**/
-            if (artistCard.description.isNotEmpty()) {
-                localStorage.insertArtist(artistCard, artistName)
+            cards = broker.getArtistCards(artistName).toMutableList()
+            cards.forEach{
+                if(it.description != EmptyCard.DESCRIPTION){
+                    localStorage.insertCard(it)
+                }
             }
         }
-        return artistCard
+        return cards
     }
 
-    private fun mapToArtistCard(lfmArticle: LastFMArticle): ArtistCard{
-        return ArtistCard(
-            lfmArticle.biography,lfmArticle.articleUrl,"LastFM",lfmArticle.lastFMLogoUrl
-        )
+    private fun ArtistCard.markItAsLocal() {
+        isLocallyStored = true
     }
 }
