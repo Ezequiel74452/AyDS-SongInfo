@@ -20,7 +20,8 @@ class NYTProxy(private val nytService: NYTimesService): Proxy() {
             artistName = name ?: "Unknown Artist",
             description = info ?: "No description available",
             infoUrl = url,
-            source = CardSrc.NYTIMES
+            source = CardSrc.NYTIMES,
+            logoUrl
         )
     }
 }

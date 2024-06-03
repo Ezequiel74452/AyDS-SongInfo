@@ -15,5 +15,5 @@ class WikipediaProxy(private val wikipediaService: WikipediaTrackService): Proxy
     }
 
     private fun WikipediaArticle.toCard(artistName: String) =
-        ArtistCard(artistName, description, wikipediaURL, CardSrc.WIKIPEDIA)
+        ArtistCard(artistName, description, wikipediaURL, CardSrc.WIKIPEDIA, wikipediaLogoURL )
 }

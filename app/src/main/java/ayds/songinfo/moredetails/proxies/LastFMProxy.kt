@@ -13,5 +13,5 @@ class LastFMProxy(private val lastFMService: LastFMService): Proxy() {
     }
 
     private fun LastFMArticle.toCard() =
-        ArtistCard(artistName, biography, articleUrl, CardSrc.LASTFM)
+        ArtistCard(artistName, biography, articleUrl, CardSrc.LASTFM, logoUrl)
 }

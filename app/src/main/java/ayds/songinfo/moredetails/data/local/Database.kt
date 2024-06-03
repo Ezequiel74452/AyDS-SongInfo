@@ -18,7 +18,8 @@ data class CardEntity(
     val artistName: String,
     val content: String,
     val url: String,
-    val source: Int
+    val source: Int,
+    val sourceImg: String
 )
 
 @Dao

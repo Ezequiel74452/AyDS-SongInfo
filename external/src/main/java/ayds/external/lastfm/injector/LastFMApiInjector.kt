@@ -1,10 +1,10 @@
-package ayds.artist.external.lastfm.injector
+package ayds.external.lastfm.injector
 
-import ayds.artist.external.lastfm.data.LastFMAPI
-import ayds.artist.external.lastfm.data.LastFMService
-import ayds.artist.external.lastfm.data.LastFMServiceImpl
-import ayds.artist.external.lastfm.data.LastFMToArticleResolver
-import ayds.artist.external.lastfm.data.LastFMToArticleResolverImpl
+import ayds.external.lastfm.data.LastFMAPI
+import ayds.external.lastfm.data.LastFMService
+import ayds.external.lastfm.data.LastFMServiceImpl
+import ayds.external.lastfm.data.LastFMToArticleResolver
+import ayds.external.lastfm.data.LastFMToArticleResolverImpl
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 

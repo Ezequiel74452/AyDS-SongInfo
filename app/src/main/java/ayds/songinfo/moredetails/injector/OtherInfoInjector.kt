@@ -2,7 +2,7 @@ package ayds.songinfo.moredetails.injector
 
 import android.content.Context
 import androidx.room.Room
-import ayds.artist.external.lastfm.injector.LastFMInjector
+import ayds.external.lastfm.injector.LastFMInjector
 import ayds.songinfo.moredetails.broker.BrokerImpl
 import ayds.songinfo.moredetails.data.OtherInfoRepositoryImpl
 import ayds.songinfo.moredetails.data.local.CardDatabase

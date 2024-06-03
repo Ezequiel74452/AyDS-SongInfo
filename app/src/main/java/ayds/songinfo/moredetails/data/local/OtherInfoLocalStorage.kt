@@ -16,7 +16,7 @@ internal class OtherInfoLocalStorageImpl(
         val artistEntities = cardDatabase.CardDao().getCardsByArtistName(artistName)
         val cards : MutableList<ArtistCard> = mutableListOf()
         artistEntities.forEach {
-            cards.add(ArtistCard(it.artistName, it.content, it.url, CardSrc.entries[it.source]))
+            cards.add(ArtistCard(it.artistName, it.content, it.url, CardSrc.entries[it.source],it.sourceImg))
         }
         return cards
     }
@@ -24,7 +24,7 @@ internal class OtherInfoLocalStorageImpl(
     override fun insertCard(card: ArtistCard) {
         cardDatabase.CardDao().insertCard(
             CardEntity(
-                card.artistName, card.description, card.infoUrl, card.source.ordinal
+                card.artistName, card.description, card.infoUrl, card.source.ordinal, card.sourceImg
             )
         )
     }

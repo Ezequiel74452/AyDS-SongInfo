@@ -12,7 +12,6 @@ private const val BIO = "bio"
 private const val CONTENT = "content"
 private const val URL = "url"
 private const val NO_RESULTS = "No Results"
-//private const val LOGO_URL= "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Lastfm_logo.svg/320px-Lastfm_logo.svg.png"
 
 internal class LastFMToArticleResolverImpl : LastFMToArticleResolver {
     override fun map(

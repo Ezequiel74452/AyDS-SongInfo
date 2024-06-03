@@ -1,6 +1,6 @@
 package ayds.songinfo.moredetails.broker
 
-import ayds.artist.external.lastfm.injector.LastFMInjector
+import ayds.external.lastfm.injector.LastFMInjector
 import ayds.songinfo.moredetails.domain.ArtistCard
 import ayds.songinfo.moredetails.proxies.LastFMProxy
 import ayds.songinfo.moredetails.proxies.NYTProxy

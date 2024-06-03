@@ -23,3 +23,5 @@ rootProject.name = "AydsSongInfo"
 include(":app")
 include(":observer")
 include(":external")
+include(":external.lastfm.data")
+

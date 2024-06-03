@@ -12,7 +12,7 @@ internal class OtherInfoRepositoryImpl(
     private val broker: Broker,
 ) : OtherInfoRepository {
 
-    override fun getArtistCard(artistName: String): List<ArtistCard>{
+    override fun getArtistCards(artistName: String): List<ArtistCard>{
         val dbCards = localStorage.getCards(artistName)
         var cards: MutableList<ArtistCard> = mutableListOf()
 

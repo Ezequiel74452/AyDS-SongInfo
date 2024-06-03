@@ -11,7 +11,8 @@ abstract class Proxy {
             EmptyCard.NAME,
             EmptyCard.DESCRIPTION,
             EmptyCard.URL,
-            src
+            src,
+            ""
         )
     }
 }

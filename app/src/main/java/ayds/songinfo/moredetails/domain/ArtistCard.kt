@@ -5,6 +5,7 @@ data class ArtistCard (
         val description: String,
         val infoUrl: String,
         val source: CardSrc,
+        val sourceImg: String,
         var isLocallyStored: Boolean = false,
     )
 
